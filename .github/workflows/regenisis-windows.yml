@@ -1,0 +1,51 @@
+name: REGENISIS Windows integration build
+on:
+  workflow_dispatch:
+  push:
+    branches: [regenisis-windows]
+    paths:
+      - 'mods/pe_regenisis/**'
+      - '.github/workflows/regenisis-windows.yml'
+      - 'mods/CMakeLists.txt'
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            git
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-ninja
+      - name: Fetch dependencies
+        run: |
+          git submodule update --init third_party/psyz
+          git -C third_party/psyz submodule update --init external/SDL
+      - name: Build native Windows scaffold
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DPE_MODS=ON -DPE_EXTRA_MODS=pe_regenisis -DBUILD_TESTING=OFF
+          cmake --build build --target parasite-eve-pc --parallel 2
+          test -f build/parasite-eve-pc.exe
+      - name: Package development executable (not playable expansion)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path staging | Out-Null
+          Copy-Item build/parasite-eve-pc.exe staging/
+          Copy-Item mods/pe_regenisis/README.md staging/REGENISIS-STATUS.md
+          Compress-Archive -Path staging/* -DestinationPath regenisis-windows-scaffold.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: regenisis-windows-scaffold-NOT-PLAYABLE-EXPANSION
+          path: regenisis-windows-scaffold.zip
