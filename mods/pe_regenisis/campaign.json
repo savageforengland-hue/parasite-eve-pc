@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "chapter": "The Forgotten Line",
+  "entry": "m0182i",
+  "story": 596,
+  "day": 5,
+  "outfit": "winter-field",
+  "kit": {
+    "level": 24,
+    "weapon": 84,
+    "armor": 161,
+    "ammunition": 3,
+    "attackBonus": 28,
+    "rangeBonus": 48
+  },
+  "rooms": [
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190
+  ],
+  "events": [
+    {
+      "id": 1,
+      "when": "enter",
+      "room": 182,
+      "pages": [
+        "New York City, 2003\nThe Forgotten Line",
+        "Kyle: Transit sealed both ends.\nThat train has no power, Aya.",
+        "Aya: Then who just called me\nfrom the platform?",
+        "Eve: I heard it too. It used\nmy voice. Follow it."
+      ]
+    },
+    {
+      "id": 2,
+      "when": "explore",
+      "room": 183,
+      "requires": 1,
+      "transfer": 186,
+      "pages": [
+        "Aya: Someone spliced a recorder\ninto the station speakers.",
+        "Recorder: Lazarus intake.\nSubject recalls the drowning.",
+        "Aya: That's my voice.\nI have never been here.",
+        "Kyle: Take the service steps.\nFollow the tracks to the signal."
+      ]
+    },
+    {
+      "id": 3,
+      "when": "victory",
+      "pages": [
+        "Eve: It stopped moving, Aya.\nWhy can I still hear it?",
+        "Aya: The voice is in the line.\nI'm taking the recording."
+      ]
+    },
+    {
+      "id": 4,
+      "when": "enter",
+      "requires": 2,
+      "afterVictory": true,
+      "finish": true,
+      "pages": [
+        "Kyle: I traced the signal.\nSaint Dymphna Hospital.",
+        "Aya: Keep that channel open.\nIf you hear me again, ask when.",
+        "The Forgotten Line\nEnd of the playable section."
+      ]
+    }
+  ]
+}
